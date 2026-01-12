@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>听写练习 - Chinese Dictation Practice</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Confetti canvas for celebrations -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+      <h1>辜嘉慧's 听写练习</h1>
+      <p class="subtitle">Personal Chinese Dictation Practice</p>
+    </header>
+
+    <!-- Lesson Selection Screen -->
+    <div id="lesson-select" class="screen active">
+      <h2>Choose a Lesson</h2>
+      <div id="lesson-grid" class="lesson-grid">
+        <!-- Lessons will be populated by JS -->
+      </div>
+    </div>
+
+    <!-- Practice Screen -->
+    <div id="practice-screen" class="screen">
+      <div class="practice-header">
+        <button id="back-btn" class="back-btn">← Back</button>
+        <h2 id="current-lesson-title"></h2>
+        <div class="progress-info">
+          <span id="progress-text">1 / 10</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <!-- Card Area -->
+      <div class="card-container">
+        <div id="practice-card" class="practice-card">
+          <!-- Front of card - prompt to listen -->
+          <div class="card-front">
+            <div class="listen-prompt">
+              <div class="speaker-icon" id="play-audio-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </div>
+              <p>Tap to listen</p>
+              <p id="front-pinyin" class="front-pinyin"></p>
+              <p class="hint-text">Write the characters on paper, then reveal to check</p>
+            </div>
+          </div>
+
+          <!-- Back of card - answer reveal -->
+          <div class="card-back">
+            <div class="answer-display">
+              <p class="select-hint">Tap characters you got RIGHT:</p>
+              <div id="chinese-text" class="chinese-text selectable-text"></div>
+              <p id="pinyin-text" class="pinyin-text"></p>
+              <p id="english-text" class="english-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="controls">
+        <button id="reveal-btn" class="btn btn-reveal">
+          <span class="btn-icon">👀</span>
+          Reveal Answer
+        </button>
+
+        <div id="result-buttons" class="result-buttons hidden">
+          <button id="wrong-btn" class="btn btn-wrong">
+            <span class="btn-icon">🔄</span>
+            Try Again Later
+          </button>
+          <button id="correct-btn" class="btn btn-correct">
+            <span class="btn-icon">✓</span>
+            Got It!
+          </button>
+        </div>
+      </div>
+
+      <!-- Replay button when answer is shown -->
+      <button id="replay-btn" class="replay-btn hidden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        Play Again
+      </button>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+      <div class="results-content">
+        <h2>Great Practice!</h2>
+        <div id="results-animation" class="results-animation"></div>
+        <div class="results-stats">
+          <div class="stat">
+            <span class="stat-number" id="correct-count">0</span>
+            <span class="stat-label">Correct</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" id="review-count">0</span>
+            <span class="stat-label">To Review</span>
+          </div>
+        </div>
+        <div class="results-buttons">
+          <button id="review-mistakes-btn" class="btn btn-secondary">Review Mistakes</button>
+          <button id="back-to-lessons-btn" class="btn btn-primary">Back to Lessons</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Encouragement Overlay -->
+    <div id="encouragement-overlay" class="overlay hidden">
+      <div class="encouragement-content">
+        <div id="encouragement-animation"></div>
+        <p id="encouragement-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
