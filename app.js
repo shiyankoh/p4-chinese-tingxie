@@ -1029,6 +1029,10 @@ function getIngredientText(ingredientName) {
 
 // Show encouragement overlay
 function showEncouragement(type, ingredientIndex = null) {
+  console.log('showEncouragement called with type:', type, 'ingredientIndex:', ingredientIndex);
+  console.log('state.isReviewMode:', state.isReviewMode, 'state.currentLesson:', state.currentLesson?.id);
+  console.log('encouragementMessages[type]:', encouragementMessages[type]);
+
   let emoji, text;
 
   if (type === 'correct' && state.currentLesson && !state.isReviewMode) {
