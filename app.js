@@ -692,7 +692,6 @@ function renderRecipeResults(recipe, isPerfect) {
       </div>
       <div class="baked-result hidden">
         <img src="${recipe.image}" alt="${recipe.name}" class="baked-image">
-        <p class="baked-text">🎉 You made ${recipe.name}! 🎉</p>
       </div>
     `;
   } else {
