@@ -1,5 +1,153 @@
 import vocabData from './vocab_data.js';
 
+// Recipe data for each lesson
+const recipeData = {
+  1: {
+    name: "Mini Muffin Tin Doughnut Holes",
+    image: "recipes/IMG_0259.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "✨", name: "Nutmeg" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🥚", name: "Egg" },
+      { emoji: "🥛", name: "Milk" },
+      { emoji: "🟤", name: "Cinnamon" },
+      { emoji: "🍬", name: "Sugar (topping)" }
+    ]
+  },
+  2: {
+    name: "Chocolate Crinkle Cookies",
+    image: "recipes/IMG_0260.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🍫", name: "Cocoa Powder" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🟤", name: "Brown Sugar" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🤍", name: "Powdered Sugar" },
+      { emoji: "🍫", name: "Chocolate" }
+    ]
+  },
+  3: {
+    name: "Chewy Peanut Butter Cookies",
+    image: "recipes/IMG_0261.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "💪", name: "Baking Soda" },
+      { emoji: "🥜", name: "Peanuts" },
+      { emoji: "🟤", name: "Brown Sugar" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🥜", name: "Peanut Butter" },
+      { emoji: "🥚", name: "Egg" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🥜", name: "More Peanut Butter" }
+    ]
+  },
+  4: {
+    name: "Jam Thumbprint Cookies",
+    image: "recipes/IMG_0262.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "💪", name: "Baking Soda" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🧀", name: "Cream Cheese" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🥚", name: "Egg" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🍓", name: "Jam" }
+    ]
+  },
+  5: {
+    name: "Chewy Brownies",
+    image: "recipes/IMG_0263.JPG",
+    ingredients: [
+      { emoji: "🍫", name: "Chocolate" },
+      { emoji: "🍫", name: "Cocoa Powder" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🍫", name: "Chocolate Chips" },
+      { emoji: "🍫", name: "More Chocolate" }
+    ]
+  },
+  6: {
+    name: "Cheesecake Bars",
+    image: "recipes/IMG_0264.JPG",
+    ingredients: [
+      { emoji: "🍪", name: "Graham Crackers" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🧀", name: "Cream Cheese" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🥛", name: "Sour Cream" },
+      { emoji: "🍓", name: "Strawberry Topping" },
+      { emoji: "🧀", name: "More Cream Cheese" }
+    ]
+  },
+  7: {
+    name: "Yellow Cake with Chocolate Frosting",
+    image: "recipes/IMG_0265.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🧈", name: "Butter" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🫙", name: "Vanilla" },
+      { emoji: "🥛", name: "Milk" },
+      { emoji: "🍫", name: "Chocolate Frosting" },
+      { emoji: "🧈", name: "More Butter" }
+    ]
+  },
+  8: {
+    name: "Carrot Cake with Cream Cheese Frosting",
+    image: "recipes/IMG_0266.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🟤", name: "Cinnamon" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "💪", name: "Baking Soda" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🟤", name: "Brown Sugar" },
+      { emoji: "🫒", name: "Oil" },
+      { emoji: "🥕", name: "Carrots" },
+      { emoji: "🧀", name: "Cream Cheese Frosting" }
+    ]
+  },
+  9: {
+    name: "Chocolate Cupcakes with Nutella Frosting",
+    image: "recipes/IMG_0267.JPG",
+    ingredients: [
+      { emoji: "🌾", name: "Flour" },
+      { emoji: "🍫", name: "Cocoa Powder" },
+      { emoji: "🧪", name: "Baking Powder" },
+      { emoji: "💪", name: "Baking Soda" },
+      { emoji: "🧂", name: "Salt" },
+      { emoji: "🥚", name: "Eggs" },
+      { emoji: "🍬", name: "Sugar" },
+      { emoji: "🥛", name: "Sour Cream" },
+      { emoji: "🫒", name: "Oil" },
+      { emoji: "🟤", name: "Nutella Frosting" }
+    ]
+  }
+};
+
 // App State
 const state = {
   currentLesson: null,
@@ -8,7 +156,8 @@ const state = {
   correctCount: 0,
   wrongItems: [],
   isReviewMode: false,
-  selectedChars: new Set() // Track which characters are marked correct
+  selectedChars: new Set(), // Track which characters are marked correct
+  collectedIngredients: [] // Track which ingredients have been collected this session
 };
 
 // DOM Elements
@@ -17,6 +166,10 @@ const elements = {
   lessonGrid: document.getElementById('lesson-grid'),
   practiceScreen: document.getElementById('practice-screen'),
   resultsScreen: document.getElementById('results-screen'),
+  recipeBookScreen: document.getElementById('recipe-book-screen'),
+  recipeBookBtn: document.getElementById('recipe-book-btn'),
+  recipeBackBtn: document.getElementById('recipe-back-btn'),
+  recipeGrid: document.getElementById('recipe-grid'),
   backBtn: document.getElementById('back-btn'),
   prevBtn: document.getElementById('prev-btn'),
   currentLessonTitle: document.getElementById('current-lesson-title'),
@@ -46,6 +199,7 @@ const elements = {
 
 // Local Storage Keys
 const STORAGE_KEY = 'p4_chinese_progress';
+const RECIPES_KEY = 'p4_chinese_recipes';
 
 // Load progress from localStorage
 function loadProgress() {
@@ -65,6 +219,26 @@ function saveProgress(lessonId, correctItems) {
     }
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+// Load unlocked recipes from localStorage
+function loadUnlockedRecipes() {
+  const saved = localStorage.getItem(RECIPES_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+// Save unlocked recipe to localStorage
+function unlockRecipe(lessonId) {
+  const unlocked = loadUnlockedRecipes();
+  if (!unlocked.includes(lessonId)) {
+    unlocked.push(lessonId);
+    localStorage.setItem(RECIPES_KEY, JSON.stringify(unlocked));
+  }
+}
+
+// Check if a recipe is unlocked
+function isRecipeUnlocked(lessonId) {
+  return loadUnlockedRecipes().includes(lessonId);
 }
 
 // Get lesson progress percentage
@@ -110,6 +284,77 @@ function renderLessonSelect() {
   });
 }
 
+// Render recipe book grid
+function renderRecipeBook() {
+  elements.recipeGrid.innerHTML = '';
+  const unlockedRecipes = loadUnlockedRecipes();
+
+  Object.keys(recipeData).forEach(lessonId => {
+    const recipe = recipeData[lessonId];
+    const isUnlocked = unlockedRecipes.includes(parseInt(lessonId));
+    const card = document.createElement('div');
+    card.className = `recipe-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+
+    if (isUnlocked) {
+      card.innerHTML = `
+        <div class="recipe-image-container">
+          <img src="${recipe.image}" alt="${recipe.name}" class="recipe-thumbnail">
+        </div>
+        <div class="recipe-card-info">
+          <p class="recipe-card-name">${recipe.name}</p>
+          <p class="recipe-card-lesson">Lesson ${lessonId}</p>
+        </div>
+      `;
+      card.addEventListener('click', () => showRecipeDetail(lessonId));
+    } else {
+      card.innerHTML = `
+        <div class="recipe-image-container locked-image">
+          <span class="lock-icon">🔒</span>
+        </div>
+        <div class="recipe-card-info">
+          <p class="recipe-card-name">???</p>
+          <p class="recipe-card-lesson">Complete Lesson ${lessonId} with 100%</p>
+        </div>
+      `;
+    }
+
+    elements.recipeGrid.appendChild(card);
+  });
+}
+
+// Show recipe detail modal
+function showRecipeDetail(lessonId) {
+  const recipe = recipeData[lessonId];
+  if (!recipe) return;
+
+  // Create and show a modal with the recipe image
+  const modal = document.createElement('div');
+  modal.className = 'recipe-modal';
+  modal.innerHTML = `
+    <div class="recipe-modal-content">
+      <button class="recipe-modal-close">&times;</button>
+      <img src="${recipe.image}" alt="${recipe.name}" class="recipe-modal-image">
+      <h3>${recipe.name}</h3>
+      <p>Unlocked from Lesson ${lessonId}</p>
+      <div class="recipe-modal-ingredients">
+        <h4>Ingredients:</h4>
+        <div class="modal-ingredients-grid">
+          ${recipe.ingredients.map(i => `<span>${i.emoji} ${i.name}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close modal on click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.classList.contains('recipe-modal-close')) {
+      modal.remove();
+    }
+  });
+}
+
 // Start a lesson
 function startLesson(lessonId) {
   const lesson = vocabData.lessons.find(l => l.id === lessonId);
@@ -121,6 +366,7 @@ function startLesson(lessonId) {
   state.correctCount = 0;
   state.wrongItems = [];
   state.isReviewMode = false;
+  state.collectedIngredients = []; // Reset collected ingredients
 
   elements.currentLessonTitle.textContent = lesson.title;
 
@@ -133,6 +379,7 @@ function showScreen(screen) {
   elements.lessonSelect.classList.remove('active');
   elements.practiceScreen.classList.remove('active');
   elements.resultsScreen.classList.remove('active');
+  elements.recipeBookScreen.classList.remove('active');
 
   switch (screen) {
     case 'lessons':
@@ -144,6 +391,10 @@ function showScreen(screen) {
       break;
     case 'results':
       elements.resultsScreen.classList.add('active');
+      break;
+    case 'recipes':
+      elements.recipeBookScreen.classList.add('active');
+      renderRecipeBook();
       break;
   }
 }
@@ -319,9 +570,17 @@ function handleCorrect() {
     state.wrongItems.push(item);
     showEncouragement('partial');
   } else {
-    // All correct
+    // All correct - collect the ingredient for this phrase
     state.correctCount++;
-    showEncouragement('correct');
+
+    // Get the ingredient for this phrase (based on original lesson order)
+    const originalIndex = state.currentLesson.items.findIndex(i => i.chinese === item.chinese);
+    const recipe = recipeData[state.currentLesson.id];
+    if (recipe && recipe.ingredients[originalIndex]) {
+      state.collectedIngredients.push(originalIndex);
+    }
+
+    showEncouragement('correct', originalIndex);
     triggerConfetti();
   }
 
@@ -376,28 +635,91 @@ function finishPractice() {
   elements.correctCount.textContent = state.correctCount;
   elements.reviewCount.textContent = state.wrongItems.length;
 
-  // Set appropriate emoji based on performance
   const percentage = (state.correctCount / state.currentItems.length) * 100;
-  if (percentage === 100) {
-    elements.resultsAnimation.textContent = '🏆';
-  } else if (percentage >= 80) {
-    elements.resultsAnimation.textContent = '🌟';
-  } else if (percentage >= 60) {
-    elements.resultsAnimation.textContent = '👍';
-  } else {
-    elements.resultsAnimation.textContent = '💪';
+  const recipe = recipeData[state.currentLesson.id];
+  const isPerfect = percentage === 100;
+
+  // If perfect score, unlock the recipe
+  if (isPerfect && recipe) {
+    unlockRecipe(state.currentLesson.id);
   }
+
+  // Render ingredients and recipe result
+  renderRecipeResults(recipe, isPerfect);
 
   // Show/hide review button based on wrong items
   elements.reviewMistakesBtn.style.display =
     state.wrongItems.length > 0 ? 'flex' : 'none';
 
   // Trigger celebration if perfect score
-  if (percentage === 100) {
+  if (isPerfect) {
     triggerConfetti();
   }
 
   showScreen('results');
+}
+
+// Render recipe results on the results screen
+function renderRecipeResults(recipe, isPerfect) {
+  if (!recipe) {
+    elements.resultsAnimation.textContent = isPerfect ? '🏆' : '💪';
+    return;
+  }
+
+  // Build the ingredients display
+  let ingredientsHtml = '<div class="collected-ingredients">';
+  ingredientsHtml += `<p class="recipe-name">Recipe: ${recipe.name}</p>`;
+  ingredientsHtml += '<div class="ingredients-grid">';
+
+  recipe.ingredients.forEach((ingredient, index) => {
+    const collected = state.collectedIngredients.includes(index);
+    ingredientsHtml += `
+      <div class="ingredient-item ${collected ? 'collected' : 'missing'}">
+        <span class="ingredient-emoji">${ingredient.emoji}</span>
+        <span class="ingredient-name">${ingredient.name}</span>
+      </div>
+    `;
+  });
+
+  ingredientsHtml += '</div>';
+
+  if (isPerfect) {
+    // Show mixing animation then final baked good
+    ingredientsHtml += `
+      <div class="mixing-bowl-container">
+        <div class="mixing-bowl">🥣</div>
+        <p class="mixing-text">Mixing ingredients...</p>
+      </div>
+      <div class="baked-result hidden">
+        <img src="${recipe.image}" alt="${recipe.name}" class="baked-image">
+        <p class="baked-text">🎉 You made ${recipe.name}! 🎉</p>
+      </div>
+    `;
+  } else {
+    ingredientsHtml += `
+      <p class="incomplete-text">Collect all ingredients to complete the recipe!</p>
+    `;
+  }
+
+  ingredientsHtml += '</div>';
+
+  elements.resultsAnimation.innerHTML = ingredientsHtml;
+
+  // If perfect, trigger the mixing animation after a delay
+  if (isPerfect) {
+    setTimeout(() => {
+      const mixingBowl = document.querySelector('.mixing-bowl-container');
+      const bakedResult = document.querySelector('.baked-result');
+      if (mixingBowl && bakedResult) {
+        mixingBowl.classList.add('mixing');
+        setTimeout(() => {
+          mixingBowl.classList.add('hidden');
+          bakedResult.classList.remove('hidden');
+          triggerConfetti();
+        }, 2000);
+      }
+    }, 500);
+  }
 }
 
 // Review mistakes
@@ -414,18 +736,8 @@ function reviewMistakes() {
   loadCurrentItem();
 }
 
-// Encouragement messages
+// Encouragement messages for partial and wrong answers
 const encouragementMessages = {
-  correct: [
-    { emoji: '🍬', text: 'Sweet like sugar!' },
-    { emoji: '🌾', text: 'Flour power!' },
-    { emoji: '🥚', text: 'Egg-cellent!' },
-    { emoji: '🧈', text: 'Smooth as butter!' },
-    { emoji: '🫙', text: 'Vanilla-fied!' },
-    { emoji: '🧂', text: 'A pinch of perfection!' },
-    { emoji: '🧂', text: 'Salt to keep things balanced!' },
-    { emoji: '💪', text: 'Arm & Hammer strong!' }
-  ],
   partial: [
     { emoji: '👏', text: 'Good progress!' },
     { emoji: '📈', text: 'Getting better!' },
@@ -446,12 +758,72 @@ const encouragementMessages = {
   ]
 };
 
-// Show encouragement overlay
-function showEncouragement(type) {
-  const messages = encouragementMessages[type];
-  const message = messages[Math.floor(Math.random() * messages.length)];
+// Get ingredient-based encouragement text
+function getIngredientText(ingredientName) {
+  const texts = {
+    "Flour": "Flour power!",
+    "Sugar": "Sweet like sugar!",
+    "Sugar (topping)": "Extra sweetness!",
+    "Baking Powder": "Rising to the occasion!",
+    "Salt": "A pinch of perfection!",
+    "Nutmeg": "Spicing things up!",
+    "Butter": "Smooth as butter!",
+    "Egg": "Egg-cellent!",
+    "Eggs": "Egg-cellent!",
+    "Milk": "Creamy goodness!",
+    "Cinnamon": "Warm and cozy!",
+    "Cocoa Powder": "Chocolatey goodness!",
+    "Brown Sugar": "Rich and sweet!",
+    "Vanilla": "Vanilla-fied!",
+    "Powdered Sugar": "Dusted with sweetness!",
+    "Chocolate": "Chocolate magic!",
+    "Baking Soda": "Arm & Hammer strong!",
+    "Peanuts": "Going nuts!",
+    "Peanut Butter": "Nutty and nice!",
+    "More Peanut Butter": "Can't have too much!",
+    "Cream Cheese": "Cream of the crop!",
+    "Jam": "Jammin'!",
+    "Chocolate Chips": "Chip chip hooray!",
+    "More Chocolate": "More is more!",
+    "Graham Crackers": "Crunchy foundation!",
+    "Sour Cream": "Tangy twist!",
+    "Strawberry Topping": "Berry delicious!",
+    "More Cream Cheese": "Extra creamy!",
+    "Chocolate Frosting": "Frosting perfection!",
+    "More Butter": "Buttery bonus!",
+    "Oil": "Smooth operator!",
+    "Carrots": "Veggie power!",
+    "Cream Cheese Frosting": "Frosted finish!",
+    "Nutella Frosting": "Nutella heaven!"
+  };
+  return texts[ingredientName] || `${ingredientName} added!`;
+}
 
-  elements.encouragementAnimation.textContent = message.emoji;
+// Show encouragement overlay
+function showEncouragement(type, ingredientIndex = null) {
+  let emoji, text;
+
+  if (type === 'correct' && state.currentLesson && !state.isReviewMode) {
+    // Get the recipe-specific ingredient
+    const recipe = recipeData[state.currentLesson.id];
+    if (recipe && ingredientIndex !== null && recipe.ingredients[ingredientIndex]) {
+      const ingredient = recipe.ingredients[ingredientIndex];
+      emoji = ingredient.emoji;
+      text = getIngredientText(ingredient.name);
+    } else {
+      // Fallback
+      emoji = '⭐';
+      text = 'Great job!';
+    }
+  } else {
+    // Use generic messages for partial/wrong
+    const messages = encouragementMessages[type];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    emoji = message.emoji;
+    text = message.text;
+  }
+
+  elements.encouragementAnimation.textContent = emoji;
 
   // Different animations for different outcomes
   if (type === 'correct') {
@@ -462,7 +834,7 @@ function showEncouragement(type) {
     elements.encouragementAnimation.className = 'shake-animation';
   }
 
-  elements.encouragementText.textContent = message.text;
+  elements.encouragementText.textContent = text;
   elements.encouragementOverlay.classList.remove('hidden');
 }
 
@@ -567,6 +939,10 @@ function setupEventListeners() {
 
   // Previous item button
   elements.prevBtn.addEventListener('click', prevItem);
+
+  // Recipe book buttons
+  elements.recipeBookBtn.addEventListener('click', () => showScreen('recipes'));
+  elements.recipeBackBtn.addEventListener('click', () => showScreen('lessons'));
 
   // Results screen buttons
   elements.reviewMistakesBtn.addEventListener('click', reviewMistakes);

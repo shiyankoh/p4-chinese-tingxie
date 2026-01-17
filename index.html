@@ -19,9 +19,24 @@
 
     <!-- Lesson Selection Screen -->
     <div id="lesson-select" class="screen active">
-      <h2>Choose a Lesson</h2>
+      <div class="menu-header">
+        <h2>Choose a Lesson</h2>
+        <button id="recipe-book-btn" class="recipe-book-btn">📖 Recipe Book</button>
+      </div>
       <div id="lesson-grid" class="lesson-grid">
         <!-- Lessons will be populated by JS -->
+      </div>
+    </div>
+
+    <!-- Recipe Book Screen -->
+    <div id="recipe-book-screen" class="screen">
+      <div class="recipe-book-header">
+        <button id="recipe-back-btn" class="back-btn">← Back</button>
+        <h2>📖 My Recipe Book</h2>
+      </div>
+      <p class="recipe-book-subtitle">Complete lessons with 100% to unlock recipes!</p>
+      <div id="recipe-grid" class="recipe-grid">
+        <!-- Recipes will be populated by JS -->
       </div>
     </div>
 
