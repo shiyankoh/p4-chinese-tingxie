@@ -1,3 +1,5 @@
+console.log('=== APP.JS LOADED ===');
+
 import vocabData from './vocab_data.js';
 
 // Recipe data for each lesson
@@ -154,10 +156,11 @@ const state = {
   currentItems: [],
   currentIndex: 0,
   correctCount: 0,
-  wrongItems: [],
+  wrongItems: [], // Items with missed characters: { item, missedChars: [indices] }
   isReviewMode: false,
   selectedChars: new Set(), // Track which characters are marked correct
-  collectedIngredients: [] // Track which ingredients have been collected this session
+  collectedIngredients: [], // Track which ingredients have been collected this session
+  isTransitioning: false // Prevent double-clicks during card transitions
 };
 
 // DOM Elements
@@ -428,6 +431,7 @@ function startLesson(lessonId) {
   state.wrongItems = [];
   state.isReviewMode = false;
   state.collectedIngredients = []; // Reset collected ingredients
+  state.isTransitioning = false; // Reset transition state
 
   elements.currentLessonTitle.textContent = lesson.title;
 
@@ -480,24 +484,41 @@ function loadCurrentItem() {
   elements.replayBtn.classList.add('hidden');
 
   // Reset selected characters
-  state.selectedChars = new Set();
+  state.selectedChars.clear();
 
   // Show pinyin on the front of the card
   elements.frontPinyin.textContent = item.pinyin;
 
-  // Render selectable characters
-  renderSelectableCharacters(item.chinese);
+  // Render selectable characters (pass missed chars if in review mode)
+  let missedChars = null;
+  if (state.isReviewMode) {
+    // In review mode, check for _missedChars on the item
+    if (item._missedChars && Array.isArray(item._missedChars)) {
+      missedChars = item._missedChars;
+    }
+    console.log('Review mode - item:', item.chinese, '_missedChars:', item._missedChars);
+  }
+  renderSelectableCharacters(item.chinese, missedChars);
 
   elements.pinyinText.textContent = item.pinyin;
   elements.englishText.textContent = item.english;
+
+  // Reset button labels for new item
+  updateResultButtonLabels();
 
   // Update progress
   updateProgress();
 }
 
 // Render characters as tappable buttons
-function renderSelectableCharacters(text) {
+function renderSelectableCharacters(text, missedChars = null) {
   elements.chineseText.innerHTML = '';
+
+  console.log('renderSelectableCharacters - text:', text, 'missedChars:', missedChars);
+
+  // Convert missedChars array to Set for quick lookup
+  const missedCharSet = missedChars ? new Set(missedChars) : null;
+  console.log('missedCharSet:', missedCharSet);
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
@@ -510,6 +531,11 @@ function renderSelectableCharacters(text) {
       btn.classList.add('punctuation');
     } else {
       btn.addEventListener('click', () => toggleCharacter(btn, i));
+
+      // In review mode, highlight previously missed characters
+      if (missedCharSet && missedCharSet.has(i)) {
+        btn.classList.add('review-highlight');
+      }
     }
 
     elements.chineseText.appendChild(btn);
@@ -532,13 +558,12 @@ function toggleCharacter(btn, index) {
 // Update button labels based on selection
 function updateResultButtonLabels() {
   const item = state.currentItems[state.currentIndex];
+  if (!item) return;
+
   const totalChars = [...item.chinese].filter(c => !punctuation.has(c) && c !== ' ').length;
   const selectedCount = state.selectedChars.size;
 
-  if (selectedCount === 0) {
-    elements.correctBtn.innerHTML = '<span class="btn-icon">✓</span> All Correct!';
-    elements.wrongBtn.innerHTML = '<span class="btn-icon">🔄</span> Try Again Later';
-  } else if (selectedCount === totalChars) {
+  if (selectedCount === 0 || selectedCount === totalChars) {
     elements.correctBtn.innerHTML = '<span class="btn-icon">✓</span> All Correct!';
     elements.wrongBtn.innerHTML = '<span class="btn-icon">🔄</span> Try Again Later';
   } else {
@@ -620,24 +645,66 @@ function revealAnswer() {
 
 // Handle correct answer (or partial correct with selections)
 function handleCorrect() {
+  // Prevent double-clicks during transition
+  if (state.isTransitioning) return;
+  state.isTransitioning = true;
+
   const item = state.currentItems[state.currentIndex];
-  const totalChars = [...item.chinese].filter(c => !punctuation.has(c) && c !== ' ').length;
+  if (!item) {
+    state.isTransitioning = false;
+    return;
+  }
+
+  // Get all selectable character indices (non-punctuation)
+  const selectableIndices = [];
+  for (let i = 0; i < item.chinese.length; i++) {
+    const char = item.chinese[i];
+    if (!punctuation.has(char) && char !== ' ') {
+      selectableIndices.push(i);
+    }
+  }
+
+  const totalChars = selectableIndices.length;
   const selectedCount = state.selectedChars.size;
 
-  // If some characters selected, it's partial - still counts as needing review
-  // If none selected, means "all correct" was clicked
-  if (selectedCount > 0 && selectedCount < totalChars) {
-    // Partial correct - show encouragement but add to review
-    state.wrongItems.push(item);
-    showEncouragement('partial');
+  // Determine which characters were missed (not selected as correct)
+  const missedCharIndices = selectableIndices.filter(i => !state.selectedChars.has(i));
+
+  if (missedCharIndices.length > 0) {
+    // Some characters missed - track them for review
+    console.log('Adding to wrongItems:', { chinese: item.chinese, missedChars: missedCharIndices });
+    state.wrongItems.push({
+      item: item,
+      missedChars: missedCharIndices
+    });
+
+    if (selectedCount > 0) {
+      // Partial correct - some right, some wrong
+      showEncouragement('partial');
+    } else {
+      // None selected means user didn't tap any as correct, but clicked "Got It!"
+      // This means all correct (no characters selected = all were correct)
+      // Actually, let's handle this case: if no chars selected and clicked "Got It!", it's all correct
+      // Remove the wrongItem we just added
+      state.wrongItems.pop();
+      state.correctCount++;
+
+      const originalIndex = state.currentLesson.items.findIndex(i => i.chinese === item.chinese);
+      const recipe = recipeData[state.currentLesson.id];
+      if (recipe && originalIndex >= 0 && recipe.ingredients[originalIndex]) {
+        state.collectedIngredients.push(originalIndex);
+      }
+
+      showEncouragement('correct', originalIndex);
+      triggerConfetti();
+    }
   } else {
-    // All correct - collect the ingredient for this phrase
+    // All characters were selected as correct (or none to select)
     state.correctCount++;
 
-    // Get the ingredient for this phrase (based on original lesson order)
     const originalIndex = state.currentLesson.items.findIndex(i => i.chinese === item.chinese);
     const recipe = recipeData[state.currentLesson.id];
-    if (recipe && recipe.ingredients[originalIndex]) {
+    if (recipe && originalIndex >= 0 && recipe.ingredients[originalIndex]) {
       state.collectedIngredients.push(originalIndex);
     }
 
@@ -648,13 +715,35 @@ function handleCorrect() {
   setTimeout(() => {
     hideEncouragement();
     nextItem();
+    state.isTransitioning = false;
   }, 1200);
 }
 
 // Handle wrong answer
 function handleWrong() {
+  // Prevent double-clicks during transition
+  if (state.isTransitioning) return;
+  state.isTransitioning = true;
+
   const item = state.currentItems[state.currentIndex];
-  state.wrongItems.push(item);
+  if (!item) {
+    state.isTransitioning = false;
+    return;
+  }
+
+  // Get all selectable character indices - all are missed
+  const missedCharIndices = [];
+  for (let i = 0; i < item.chinese.length; i++) {
+    const char = item.chinese[i];
+    if (!punctuation.has(char) && char !== ' ') {
+      missedCharIndices.push(i);
+    }
+  }
+
+  state.wrongItems.push({
+    item: item,
+    missedChars: missedCharIndices
+  });
 
   // Show encouragement
   showEncouragement('wrong');
@@ -662,6 +751,7 @@ function handleWrong() {
   setTimeout(() => {
     hideEncouragement();
     nextItem();
+    state.isTransitioning = false;
   }, 1200);
 }
 
@@ -686,15 +776,21 @@ function prevItem() {
 
 // Finish practice session
 function finishPractice() {
-  // Save progress for correct items
+  // Get items that had wrong characters
+  const wrongItemObjects = state.wrongItems.map(w => w.item);
+
+  // Save progress for fully correct items (no missed characters)
   const correctItems = state.currentItems.filter(
-    item => !state.wrongItems.includes(item)
+    item => !wrongItemObjects.includes(item)
   );
   saveProgress(state.currentLesson.id, correctItems);
 
+  // Count total missed characters across all items
+  const totalMissedChars = state.wrongItems.reduce((sum, w) => sum + w.missedChars.length, 0);
+
   // Update results screen
   elements.correctCount.textContent = state.correctCount;
-  elements.reviewCount.textContent = state.wrongItems.length;
+  elements.reviewCount.textContent = totalMissedChars; // Show character count
 
   const percentage = (state.correctCount / state.currentItems.length) * 100;
   const recipe = recipeData[state.currentLesson.id];
@@ -708,7 +804,7 @@ function finishPractice() {
   // Render ingredients and recipe result
   renderRecipeResults(recipe, isPerfect);
 
-  // Render word summary (correct on left, missed on right)
+  // Render word summary (correct on left, missed characters on right)
   renderWordSummary(correctItems, state.wrongItems);
 
   // Show/hide review button based on wrong items
@@ -733,13 +829,29 @@ function renderWordSummary(correctItems, wrongItems) {
     </div>
   `).join('');
 
-  // Render missed words
-  elements.missedWordsList.innerHTML = wrongItems.map(item => `
-    <div class="word-item">
-      <span class="word-chinese">${item.chinese}</span>
-      <span class="word-pinyin">${item.pinyin}</span>
-    </div>
-  `).join('');
+  // Render missed words with highlighted missed characters
+  elements.missedWordsList.innerHTML = wrongItems.map(wrongItem => {
+    const item = wrongItem.item;
+    const missedChars = new Set(wrongItem.missedChars);
+
+    // Build the Chinese text with missed characters highlighted
+    let highlightedChinese = '';
+    for (let i = 0; i < item.chinese.length; i++) {
+      const char = item.chinese[i];
+      if (missedChars.has(i)) {
+        highlightedChinese += `<span class="missed-char">${char}</span>`;
+      } else {
+        highlightedChinese += char;
+      }
+    }
+
+    return `
+      <div class="word-item">
+        <span class="word-chinese">${highlightedChinese}</span>
+        <span class="word-pinyin">${item.pinyin}</span>
+      </div>
+    `;
+  }).join('');
 
   // Show empty state messages if needed
   if (correctItems.length === 0) {
@@ -816,11 +928,29 @@ function renderRecipeResults(recipe, isPerfect) {
 function reviewMistakes() {
   if (state.wrongItems.length === 0) return;
 
-  state.currentItems = shuffleArray([...state.wrongItems]);
+  console.log('reviewMistakes called, wrongItems:', state.wrongItems);
+
+  // Extract just the items for practice, keeping track of missed chars
+  // Create new objects with _missedChars property explicitly set
+  const itemsWithMissedChars = state.wrongItems.map(w => {
+    const newItem = Object.assign({}, w.item);
+    newItem._missedChars = w.missedChars;
+    console.log('Created review item:', newItem.chinese, '_missedChars:', newItem._missedChars);
+    return newItem;
+  });
+
+  state.currentItems = shuffleArray(itemsWithMissedChars);
+  console.log('After shuffle, currentItems[0]:', state.currentItems[0]);
+  console.log('After shuffle, currentItems[0]._missedChars:', state.currentItems[0]?._missedChars);
   state.currentIndex = 0;
   state.correctCount = 0;
   state.wrongItems = [];
   state.isReviewMode = true;
+  state.collectedIngredients = []; // Reset collected ingredients for review
+  state.isTransitioning = false; // Reset transition state
+
+  console.log('About to show practice screen. isReviewMode:', state.isReviewMode);
+  console.log('currentItems:', state.currentItems.map(i => ({ chinese: i.chinese, _missedChars: i._missedChars })));
 
   showScreen('practice');
   loadCurrentItem();

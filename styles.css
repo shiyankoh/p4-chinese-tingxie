@@ -559,6 +559,27 @@ body {
   color: var(--text-secondary);
 }
 
+/* Review mode - highlight previously missed characters */
+.char-btn.review-highlight {
+  background: var(--warning-light);
+  border-color: #f59e0b;
+  animation: pulse-highlight 2s ease-in-out infinite;
+}
+
+@keyframes pulse-highlight {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2); }
+}
+
+/* Missed character in results summary */
+.missed-char {
+  color: var(--error-color);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--error-color);
+  text-underline-offset: 2px;
+}
+
 .pinyin-text {
   font-size: 1.1rem;
   color: var(--primary-color);
