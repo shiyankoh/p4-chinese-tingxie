@@ -201,7 +201,11 @@ const elements = {
   settingsClose: document.getElementById('settings-close'),
   resetAllBtn: document.getElementById('reset-all-btn'),
   resetLessonSelect: document.getElementById('reset-lesson-select'),
-  resetLessonBtn: document.getElementById('reset-lesson-btn')
+  resetLessonBtn: document.getElementById('reset-lesson-btn'),
+  // Word summary elements
+  wordSummary: document.getElementById('word-summary'),
+  correctWordsList: document.getElementById('correct-words-list'),
+  missedWordsList: document.getElementById('missed-words-list')
 };
 
 // Local Storage Keys
@@ -704,6 +708,9 @@ function finishPractice() {
   // Render ingredients and recipe result
   renderRecipeResults(recipe, isPerfect);
 
+  // Render word summary (correct on left, missed on right)
+  renderWordSummary(correctItems, state.wrongItems);
+
   // Show/hide review button based on wrong items
   elements.reviewMistakesBtn.style.display =
     state.wrongItems.length > 0 ? 'flex' : 'none';
@@ -714,6 +721,33 @@ function finishPractice() {
   }
 
   showScreen('results');
+}
+
+// Render word summary with correct and missed words
+function renderWordSummary(correctItems, wrongItems) {
+  // Render correct words
+  elements.correctWordsList.innerHTML = correctItems.map(item => `
+    <div class="word-item">
+      <span class="word-chinese">${item.chinese}</span>
+      <span class="word-pinyin">${item.pinyin}</span>
+    </div>
+  `).join('');
+
+  // Render missed words
+  elements.missedWordsList.innerHTML = wrongItems.map(item => `
+    <div class="word-item">
+      <span class="word-chinese">${item.chinese}</span>
+      <span class="word-pinyin">${item.pinyin}</span>
+    </div>
+  `).join('');
+
+  // Show empty state messages if needed
+  if (correctItems.length === 0) {
+    elements.correctWordsList.innerHTML = '<p class="empty-message">None yet</p>';
+  }
+  if (wrongItems.length === 0) {
+    elements.missedWordsList.innerHTML = '<p class="empty-message">None!</p>';
+  }
 }
 
 // Render recipe results on the results screen

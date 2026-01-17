@@ -720,6 +720,72 @@ body {
   color: var(--text-secondary);
 }
 
+/* Word Summary */
+.word-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.word-column {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.word-column h4 {
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.correct-column h4 {
+  color: var(--success-color);
+}
+
+.missed-column h4 {
+  color: var(--error-color);
+}
+
+.word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.word-item {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  background: var(--background);
+  border-radius: var(--radius-sm);
+}
+
+.word-chinese {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.word-pinyin {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.empty-message {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: center;
+  padding: 8px;
+}
+
 .results-buttons {
   display: flex;
   flex-direction: column;
