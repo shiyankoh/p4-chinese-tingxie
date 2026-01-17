@@ -956,7 +956,7 @@ function reviewMistakes() {
   loadCurrentItem();
 }
 
-// Encouragement messages for partial and wrong answers
+// Encouragement messages for partial, wrong, and correct (review mode) answers
 const encouragementMessages = {
   partial: [
     { emoji: '👏', text: 'Good progress!' },
@@ -965,6 +965,14 @@ const encouragementMessages = {
     { emoji: '💫', text: 'Keep it up!' },
     { emoji: '🎯', text: 'So close!' },
     { emoji: '✨', text: 'Almost there!' }
+  ],
+  correct: [
+    { emoji: '⭐', text: 'Great job!' },
+    { emoji: '🎉', text: 'Perfect!' },
+    { emoji: '✅', text: 'Nailed it!' },
+    { emoji: '🌟', text: 'Excellent!' },
+    { emoji: '💯', text: 'You got it!' },
+    { emoji: '🏆', text: 'Champion!' }
   ],
   wrong: [
     { emoji: '💪', text: 'Keep trying!' },
