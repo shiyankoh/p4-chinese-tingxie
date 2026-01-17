@@ -18,6 +18,7 @@ const elements = {
   practiceScreen: document.getElementById('practice-screen'),
   resultsScreen: document.getElementById('results-screen'),
   backBtn: document.getElementById('back-btn'),
+  prevBtn: document.getElementById('prev-btn'),
   currentLessonTitle: document.getElementById('current-lesson-title'),
   progressText: document.getElementById('progress-text'),
   progressBar: document.getElementById('progress-bar'),
@@ -355,6 +356,14 @@ function nextItem() {
   }
 }
 
+// Move to previous item
+function prevItem() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    loadCurrentItem();
+  }
+}
+
 // Finish practice session
 function finishPractice() {
   // Save progress for correct items
@@ -553,8 +562,11 @@ function setupEventListeners() {
   // Replay audio
   elements.replayBtn.addEventListener('click', playAudio);
 
-  // Back button
+  // Back button (to menu)
   elements.backBtn.addEventListener('click', () => showScreen('lessons'));
+
+  // Previous item button
+  elements.prevBtn.addEventListener('click', prevItem);
 
   // Results screen buttons
   elements.reviewMistakesBtn.addEventListener('click', reviewMistakes);

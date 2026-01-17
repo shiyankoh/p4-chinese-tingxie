@@ -192,6 +192,22 @@ body {
   color: var(--text-primary);
 }
 
+.nav-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
 .practice-header h2 {
   flex: 1;
   font-size: 1rem;
