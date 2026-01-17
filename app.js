@@ -194,7 +194,14 @@ const elements = {
   encouragementAnimation: document.getElementById('encouragement-animation'),
   encouragementText: document.getElementById('encouragement-text'),
   resultsAnimation: document.getElementById('results-animation'),
-  confettiCanvas: document.getElementById('confetti-canvas')
+  confettiCanvas: document.getElementById('confetti-canvas'),
+  // Settings elements
+  settingsBtn: document.getElementById('settings-btn'),
+  settingsModal: document.getElementById('settings-modal'),
+  settingsClose: document.getElementById('settings-close'),
+  resetAllBtn: document.getElementById('reset-all-btn'),
+  resetLessonSelect: document.getElementById('reset-lesson-select'),
+  resetLessonBtn: document.getElementById('reset-lesson-btn')
 };
 
 // Local Storage Keys
@@ -239,6 +246,56 @@ function unlockRecipe(lessonId) {
 // Check if a recipe is unlocked
 function isRecipeUnlocked(lessonId) {
   return loadUnlockedRecipes().includes(lessonId);
+}
+
+// Reset all progress
+function resetAllProgress() {
+  if (confirm('Are you sure you want to reset ALL progress? This will clear all lesson progress and unlocked recipes. This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(RECIPES_KEY);
+    renderLessonSelect();
+    closeSettingsModal();
+  }
+}
+
+// Reset specific lesson progress
+function resetLessonProgress(lessonId) {
+  const lesson = vocabData.lessons.find(l => l.id === parseInt(lessonId));
+  if (!lesson) return;
+
+  if (confirm(`Are you sure you want to reset progress for "${lesson.title}"? This cannot be undone.`)) {
+    // Remove lesson from progress
+    const progress = loadProgress();
+    delete progress[lessonId];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+    // Remove recipe unlock for this lesson
+    const recipes = loadUnlockedRecipes();
+    const updatedRecipes = recipes.filter(id => id !== parseInt(lessonId));
+    localStorage.setItem(RECIPES_KEY, JSON.stringify(updatedRecipes));
+
+    renderLessonSelect();
+    closeSettingsModal();
+  }
+}
+
+// Open settings modal
+function openSettingsModal() {
+  // Populate lesson dropdown
+  elements.resetLessonSelect.innerHTML = '<option value="">-- Select Lesson --</option>';
+  vocabData.lessons.forEach(lesson => {
+    const option = document.createElement('option');
+    option.value = lesson.id;
+    option.textContent = `Lesson ${lesson.id}: ${lesson.title}`;
+    elements.resetLessonSelect.appendChild(option);
+  });
+
+  elements.settingsModal.classList.remove('hidden');
+}
+
+// Close settings modal
+function closeSettingsModal() {
+  elements.settingsModal.classList.add('hidden');
 }
 
 // Get lesson progress percentage
@@ -954,6 +1011,26 @@ function setupEventListeners() {
   window.addEventListener('resize', () => {
     elements.confettiCanvas.width = window.innerWidth;
     elements.confettiCanvas.height = window.innerHeight;
+  });
+
+  // Settings modal
+  elements.settingsBtn.addEventListener('click', openSettingsModal);
+  elements.settingsClose.addEventListener('click', closeSettingsModal);
+  elements.settingsModal.addEventListener('click', (e) => {
+    if (e.target === elements.settingsModal) {
+      closeSettingsModal();
+    }
+  });
+
+  // Reset buttons
+  elements.resetAllBtn.addEventListener('click', resetAllProgress);
+  elements.resetLessonSelect.addEventListener('change', () => {
+    elements.resetLessonBtn.disabled = !elements.resetLessonSelect.value;
+  });
+  elements.resetLessonBtn.addEventListener('click', () => {
+    if (elements.resetLessonSelect.value) {
+      resetLessonProgress(elements.resetLessonSelect.value);
+    }
   });
 }
 

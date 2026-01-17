@@ -15,7 +15,30 @@
     <header class="header">
       <h1>辜嘉慧's 听写练习</h1>
       <p class="subtitle">Personal Chinese Dictation Practice</p>
+      <button id="settings-btn" class="settings-btn" title="Settings">⚙️</button>
     </header>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+      <div class="modal-content settings-modal-content">
+        <button class="modal-close" id="settings-close">&times;</button>
+        <h3>Settings</h3>
+        <div class="settings-section">
+          <h4>Reset Progress</h4>
+          <p class="settings-description">Clear your lesson progress and unlocked recipes.</p>
+          <div class="reset-options">
+            <button id="reset-all-btn" class="btn btn-danger">Reset All Progress</button>
+          </div>
+          <div class="reset-lesson-section">
+            <label for="reset-lesson-select">Or reset a specific lesson:</label>
+            <select id="reset-lesson-select">
+              <option value="">-- Select Lesson --</option>
+            </select>
+            <button id="reset-lesson-btn" class="btn btn-secondary" disabled>Reset Lesson</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Lesson Selection Screen -->
     <div id="lesson-select" class="screen active">
