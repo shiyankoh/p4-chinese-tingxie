@@ -408,14 +408,14 @@ function reviewMistakes() {
 // Encouragement messages
 const encouragementMessages = {
   correct: [
-    { emoji: '🎉', text: 'Awesome!' },
-    { emoji: '⭐', text: 'Great job!' },
-    { emoji: '🌟', text: 'Fantastic!' },
-    { emoji: '✨', text: 'You got it!' },
-    { emoji: '🎊', text: 'Perfect!' },
-    { emoji: '🏆', text: 'Champion!' },
-    { emoji: '💯', text: 'Nailed it!' },
-    { emoji: '🔥', text: 'On fire!' }
+    { emoji: '🍬', text: 'Sweet like sugar!' },
+    { emoji: '🌾', text: 'Flour power!' },
+    { emoji: '🥚', text: 'Egg-cellent!' },
+    { emoji: '🧈', text: 'Smooth as butter!' },
+    { emoji: '🫙', text: 'Vanilla-fied!' },
+    { emoji: '🧂', text: 'A pinch of perfection!' },
+    { emoji: '🧂', text: 'Salt to keep things balanced!' },
+    { emoji: '💪', text: 'Arm & Hammer strong!' }
   ],
   partial: [
     { emoji: '👏', text: 'Good progress!' },
