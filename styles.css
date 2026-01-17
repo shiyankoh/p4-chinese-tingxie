@@ -677,7 +677,9 @@ body {
 /* Results Screen */
 .results-content {
   text-align: center;
-  padding: 40px 20px;
+  padding: 20px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 .results-content h2 {
